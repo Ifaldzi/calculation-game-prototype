@@ -1,0 +1,136 @@
+<html>
+  <head>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="row justify-content-end w-100 bg-light">
+      <div class="col-4 py-4">
+        <canvas class="border" id="canvas" width="300" height="500"></canvas>
+      </div>
+      <div class="col-4 my-4 border border-2">
+        <p>Options</p>
+        <div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="addition"
+              name="operator"
+              value="ADDITION"
+            />
+            <label class="form-check-label" for="addition">ADDITION</label>
+          </div>
+
+          <div class="form-check-inline">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="substraction"
+              name="operator"
+              value="SUBSTRACTION"
+            />
+            <label class="form-check-label" for="substraction"
+              >SUBSTRACTION</label
+            >
+          </div>
+
+          <div class="form-check-inline">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="is-negative"
+              name="is_negative"
+              value="SUBSTRACTION"
+            />
+            <label class="form-check-label" for="is-negative"
+              >IS NEGATIVE</label
+            >
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="multiplication"
+              name="operator"
+              value="MULTIPLICATION"
+            />
+            <label class="form-check-label" for="multiplication"
+              >MULTIPLICATION</label
+            >
+          </div>
+
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="division"
+              name="operator"
+              value="DIVISION"
+            />
+            <label class="form-check-label" for="division">DIVISION</label>
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-6">
+            <label class="form-label" for="speed">ENEMY SPEED</label>
+            <input
+              class="form-control"
+              type="number"
+              id="speed"
+              name="speed"
+              value="0.1"
+            />
+          </div>
+        </div>
+
+        <div class="row mt-4">
+          <div class="col-6">
+            <label class="form-label" for="total">TOTAL ENEMY</label>
+            <input
+              class="form-control"
+              type="number"
+              id="total"
+              name="total"
+              value="5"
+            />
+          </div>
+
+          <div class="col-6">
+            <label class="form-label" for="wave">TOTAL WAVE</label>
+            <input
+              class="form-control"
+              type="number"
+              id="wave"
+              name="wave"
+              value="1"
+            />
+          </div>
+        </div>
+
+        <button class="mt-4" id="start-btn">START</button>
+      </div>
+    </div>
+    <div class="row justify-content-center w-100">
+      <div class="col-4">
+        <input id="answer" style="width: 300px" type="number" />
+      </div>
+    </div>
+    <div class="row justify-content-center w-100">
+      <div class="col-4">
+        <span id="life">❤️❤️❤️</span>
+      </div>
+    </div>
+
+    <div style="display: none">
+      <img id="sprite-1" src="./assets/oray2.png" width="75" height="75" />
+    </div>
+  </body>
+  <script src="./index.min.js"></script>
+</html>
