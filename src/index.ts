@@ -1,58 +1,49 @@
+import GameConfig from './Configs/GameConfig';
 import Game from './Game';
+import GameManager from './GameManager';
 import { Operator } from './Questions/Operator.Enum';
+import Button from './UI/Button';
+import Select from './UI/Select';
 import { ALL_OPERATOR } from './constants';
 
-const game: Game = Game.getInstance('canvas');
+const game: Game = Game.getInstance('canvas', () => {
+  console.log('Game loaded');
 
-const startButton = document.getElementById('start-btn') as HTMLButtonElement;
-const speedInput = document.getElementById('speed') as HTMLInputElement;
-const isNegativeCheckbox = document.getElementById(
-  'is-negative',
-) as HTMLInputElement;
-const totalEnemyInput = document.getElementById('total') as HTMLInputElement;
-const totalWaveInput = document.getElementById('wave') as HTMLInputElement;
-const operatorInputs = document.getElementsByName('operator');
+  const startButton = new Button('start-btn', () => {
+    const levelOption = manager.levelOption;
+    console.log(levelOption);
+    const operators: Operator[] = [];
 
-startButton?.addEventListener('click', () => {
-  const operators: Operator[] = [];
-  operatorInputs.forEach((input) => {
-    if ((input as HTMLInputElement).checked) {
-      switch ((input as HTMLInputElement).id) {
-        case 'addition':
-          operators.push(Operator.ADDITION);
-          break;
-        case 'substraction':
-          operators.push(Operator.SUBTRACTION);
-          break;
-        case 'multiplication':
-          operators.push(Operator.MULTIPLICATION);
-          break;
-        case 'division':
-          operators.push(Operator.DIVISION);
-          break;
-        default:
-          break;
-      }
-    }
+    if (levelOption.addition) operators.push(Operator.ADDITION);
+    if (levelOption.substraction) operators.push(Operator.SUBTRACTION);
+    if (levelOption.multiplication) operators.push(Operator.MULTIPLICATION);
+    if (levelOption.division) operators.push(Operator.DIVISION);
+
+    game.setOptions({
+      enemySpeed: levelOption.enemy_speed,
+      isNegative: levelOption.is_negative,
+      totalEnemy: levelOption.total_enemy,
+      totalWave: levelOption.total_wave,
+      operator: operators.length > 0 ? operators : ALL_OPERATOR,
+      gameOverCallback: () => {
+        startButton.disabled = false;
+      },
+    });
+
+    game.start();
+
+    startButton.disabled = true;
   });
 
-  console.log(isNegativeCheckbox.checked);
+  const levelSelection = new Select<number>('level');
 
-  game.setOptions({
-    enemySpeed: parseFloat(speedInput.value),
-    isNegative: isNegativeCheckbox.checked,
-    totalEnemy: parseInt(totalEnemyInput.value),
-    totalWave: parseInt(totalWaveInput.value),
-    operator: operators.length > 0 ? operators : ALL_OPERATOR,
-    gameOverCallback: () => {
-      startButton.disabled = false;
-    },
-  });
+  const res = GameConfig.getLevel(levelSelection.value || 1);
 
-  game.start();
+  const manager = GameManager.instance;
+  manager.levelOption = res;
 
-  startButton.disabled = true;
+  levelSelection.onchange = (value) => {
+    const newConfig = GameConfig.getLevel(value);
+    manager.levelOption = newConfig;
+  };
 });
-
-const lifeText = document.getElementById('life');
-console.log(lifeText?.textContent);

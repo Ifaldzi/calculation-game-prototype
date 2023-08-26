@@ -25,7 +25,10 @@ module.exports = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: './public' }],
+      patterns: [
+        { from: './public' },
+        { from: 'src/Configs/config.cfg', to: 'Configs' },
+      ],
     }),
   ],
 };

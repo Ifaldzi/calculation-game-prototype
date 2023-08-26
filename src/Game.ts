@@ -1,3 +1,4 @@
+import GameConfig from './Configs/GameConfig';
 import DrawingContext from './DrawingContext';
 import { Enemy } from './Enemies/Enemy';
 import { EnemySpawner } from './Enemies/EnemySpawner';
@@ -43,9 +44,10 @@ export default class Game {
     this.ctx = this.canvas.getContext('2d')!;
   }
 
-  public static getInstance(canvasId: string) {
+  public static getInstance(canvasId: string, onLoaded?: () => void) {
     if (!this.instance) {
       this.instance = new Game(canvasId);
+      GameConfig.loadConfig().then(onLoaded);
     }
 
     return this.instance;
@@ -100,7 +102,6 @@ export default class Game {
       this.enemy.moveDown();
       if (!this.enemy.active) {
         delete this.enemy;
-        console.log(this.enemy);
         this.enemy = EnemySpawner.spawnEnemy(
           this.questionsBank.shift(),
           this.options.enemySpeed,
