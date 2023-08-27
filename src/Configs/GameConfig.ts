@@ -23,4 +23,9 @@ export default class GameConfig {
   public static getLevel(level: number): LevelOption | null {
     return this.getSection(`Level${level}`);
   }
+
+  public static get totalLevel(): number {
+    return Object.entries(this.config).filter(([key]) => key.includes('Level'))
+      .length;
+  }
 }

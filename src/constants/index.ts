@@ -6,3 +6,5 @@ export const ALL_OPERATOR = [
   Operator.MULTIPLICATION,
   Operator.DIVISION,
 ];
+
+export const CONFIG_FILE_PATH = 'Configs/config.cfg';

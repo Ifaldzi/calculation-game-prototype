@@ -7,8 +7,6 @@ import Select from './UI/Select';
 import { ALL_OPERATOR } from './constants';
 
 const game: Game = Game.getInstance('canvas', () => {
-  console.log('Game loaded');
-
   const startButton = new Button('start-btn', () => {
     const levelOption = manager.levelOption;
     console.log(levelOption);
@@ -35,7 +33,16 @@ const game: Game = Game.getInstance('canvas', () => {
     startButton.disabled = true;
   });
 
-  const levelSelection = new Select<number>('level');
+  const levelSelectOptions = Array(GameConfig.totalLevel)
+    .fill(0)
+    .map((_, index) => {
+      return {
+        value: index + 1,
+        name: `Level ${index + 1}`,
+      };
+    });
+  console.log(levelSelectOptions);
+  const levelSelection = new Select<number>('level', levelSelectOptions);
 
   const res = GameConfig.getLevel(levelSelection.value || 1);
 
