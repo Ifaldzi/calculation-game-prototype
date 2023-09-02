@@ -1,8 +1,10 @@
+import GameConfig from '../Configs/GameConfig';
 import DrawingContext from '../DrawingContext';
 import EventListener from '../Listeners/EventListener';
 import Listener from '../Listeners/Listener';
 // import listener from '../Listeners/Listener';
 import { Question } from '../Questions/Question';
+import { DEFAULT_CANVAS_WIDTH, ZERO_POINT } from '../constants';
 
 interface Point {
   x: number;
@@ -15,6 +17,7 @@ export class Enemy implements EventListener {
   public speed: number;
   public active: boolean = true;
   private sprite: string;
+  private spriteImage?: HTMLImageElement;
 
   private context: DrawingContext;
   private listener: Listener;
@@ -29,14 +32,29 @@ export class Enemy implements EventListener {
     this.position = position;
     this.speed = speed;
     this.sprite = sprite;
+    this.spriteImage = document.getElementById(this.sprite) as HTMLImageElement;
     this.context = DrawingContext.getInstance();
 
     this.listener = new Listener(this);
     this.listener.addAnswerListener();
   }
 
+  public static createEnemy(question: Question, sprite: string, speed: number) {
+    const enemy = new Enemy(question, sprite, ZERO_POINT, speed);
+
+    const canvasWidth =
+      GameConfig.get<number>('General', 'width') || DEFAULT_CANVAS_WIDTH;
+    const randomXPos = Math.floor(
+      Math.random() * (canvasWidth - (enemy.spriteImage?.width || 0)),
+    );
+
+    enemy.position = { x: randomXPos, y: 0 };
+
+    return enemy;
+  }
+
   public moveDown(): void {
-    if (this.position.y > 520) {
+    if (this.position.y > GameConfig.get<number>('General', 'height')! + 20) {
       this.hitPlayer();
       this.destroy();
     }
@@ -68,27 +86,24 @@ export class Enemy implements EventListener {
   }
 
   public draw() {
-    if (this.active) {
-      const image = document.getElementById(this.sprite) as HTMLImageElement;
-
+    if (this.active && this.spriteImage) {
       this.context.ctx.drawImage(
-        image,
+        this.spriteImage,
         this.position.x,
         this.position.y,
-        image.width,
-        image.height,
+        this.spriteImage.width,
+        this.spriteImage.height,
       );
 
       this.context.ctx.font = '18px serif';
-      // this.context.ctx.textAlign = 'center';
       const questionText = this.context.ctx.measureText(
         this.question.printQuestion(),
       );
       this.context.ctx.fillText(
         this.question.printQuestion(),
-        this.position.x + (image.width - questionText.width) / 2.0,
+        this.position.x + (this.spriteImage.width - questionText.width) / 2.0,
         this.position.y - 10,
-        image.width,
+        this.spriteImage.width,
       );
     }
   }

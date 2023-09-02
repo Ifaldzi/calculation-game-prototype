@@ -10,8 +10,7 @@ export class EnemySpawner {
     speed: number = 0.1,
   ): Enemy | null {
     if (question) {
-      const randomXPos = Math.floor(Math.random() * 250);
-      return new Enemy(question, 'sprite-1', { x: randomXPos, y: 0 }, speed);
+      return Enemy.createEnemy(question, 'sprite-1', speed);
     }
     return null;
   }

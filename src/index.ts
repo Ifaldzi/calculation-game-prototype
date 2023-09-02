@@ -41,7 +41,6 @@ const game: Game = Game.getInstance('canvas', () => {
         name: `Level ${index + 1}`,
       };
     });
-  console.log(levelSelectOptions);
   const levelSelection = new Select<number>('level', levelSelectOptions);
 
   const res = GameConfig.getLevel(levelSelection.value || 1);
