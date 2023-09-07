@@ -3,7 +3,6 @@ import Game from './Game';
 import GameManager from './GameManager';
 import { Operator } from './Questions/Operator.Enum';
 import Button from './UI/Button';
-import Select from './UI/Select';
 import { ALL_OPERATOR } from './constants';
 
 const game: Game = Game.getInstance('canvas', () => {
@@ -41,15 +40,11 @@ const game: Game = Game.getInstance('canvas', () => {
         name: `Level ${index + 1}`,
       };
     });
-  const levelSelection = new Select<number>('level', levelSelectOptions);
 
-  const res = GameConfig.getLevel(levelSelection.value || 1);
-
+  console.log(GameConfig.totalLevel);
   const manager = GameManager.instance;
-  manager.levelOption = res;
+  manager.setLevelSelectOption(levelSelectOptions);
+  const res = GameConfig.getLevel(manager.currentLevel);
 
-  levelSelection.onchange = (value) => {
-    const newConfig = GameConfig.getLevel(value);
-    manager.levelOption = newConfig;
-  };
+  manager.levelOption = res;
 });

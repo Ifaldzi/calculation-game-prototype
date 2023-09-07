@@ -15,8 +15,26 @@ export default class Select<T> extends UIComponent<HTMLSelectElement> {
     });
   }
 
+  public setOptions(options: Array<{ value: T; name: string }>) {
+    this.options.forEach((_, index) => {
+      this.element?.options.remove(index);
+    });
+
+    this.options = options;
+    options.forEach((opt) => {
+      const optionElement = document.createElement('option');
+      optionElement.text = opt.name;
+      optionElement.value = opt.value as string;
+      this.element?.options.add(optionElement);
+    });
+  }
+
   public get value(): T | null {
     return this.element?.value as T;
+  }
+
+  public set value(value: T) {
+    if (this.element) this.element.value = value as string;
   }
 
   public set onchange(onchange: (value: T) => void) {

@@ -2,9 +2,12 @@ import GameConfig from '../Configs/GameConfig';
 import DrawingContext from '../DrawingContext';
 import EventListener from '../Listeners/EventListener';
 import Listener from '../Listeners/Listener';
-// import listener from '../Listeners/Listener';
 import { Question } from '../Questions/Question';
-import { DEFAULT_CANVAS_WIDTH, ZERO_POINT } from '../constants';
+import {
+  DEFAULT_CANVAS_HEIGHT,
+  DEFAULT_CANVAS_WIDTH,
+  ZERO_POINT,
+} from '../constants';
 
 interface Point {
   x: number;
@@ -54,7 +57,9 @@ export class Enemy implements EventListener {
   }
 
   public moveDown(): void {
-    if (this.position.y > GameConfig.get<number>('General', 'height')! + 20) {
+    const canvasHeight =
+      GameConfig.get<number>('General', 'height') || DEFAULT_CANVAS_HEIGHT;
+    if (this.position.y > +canvasHeight + 20) {
       this.hitPlayer();
       this.destroy();
     }

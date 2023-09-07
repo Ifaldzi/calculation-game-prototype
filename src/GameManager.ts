@@ -1,5 +1,7 @@
+import GameConfig from './Configs/GameConfig';
 import LevelOption from './Configs/LevelOption';
 import Checkbox from './UI/Checkbox';
+import Select from './UI/Select';
 import TextField from './UI/TextField';
 
 export default class GameManager {
@@ -11,14 +13,39 @@ export default class GameManager {
     return this._instance;
   }
 
-  private _levelOption?: LevelOption;
-  private currentLevel: number = 1;
+  constructor() {
+    this.levelSelection.onchange = (value) => {
+      const newConfig = GameConfig.getLevel(value);
+      this.levelOption = newConfig;
+    };
+  }
+
+  private _currentLevel: number = 1;
 
   private speedInput = new TextField('speed');
   private isNegativeCheckbox = new Checkbox('is-negative');
   private totalEnemyInput = new TextField('total');
   private totalWaveInput = new TextField('wave');
   private operatorInputs = Checkbox.groups('operator');
+  private levelSelection = new Select<number>('level', []);
+
+  public setLevelSelectOption(
+    levelSelectOptions: Array<{ value: number; name: string }>,
+  ) {
+    this.levelSelection.setOptions(levelSelectOptions);
+  }
+
+  public get currentLevel(): number {
+    if (this.levelSelection.value)
+      return parseInt(this.levelSelection.value?.toString());
+
+    return this._currentLevel;
+  }
+
+  public set currentLevel(level: number) {
+    this._currentLevel = level;
+    this.levelSelection.value = level;
+  }
 
   public get levelOption(): LevelOption {
     return {
@@ -64,8 +91,6 @@ export default class GameManager {
             break;
         }
       });
-
-      this._levelOption = option;
     }
   }
 }

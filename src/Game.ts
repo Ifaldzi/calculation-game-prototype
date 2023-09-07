@@ -1,7 +1,9 @@
 import GameConfig from './Configs/GameConfig';
+import LevelOption from './Configs/LevelOption';
 import DrawingContext from './DrawingContext';
 import { Enemy } from './Enemies/Enemy';
 import { EnemySpawner } from './Enemies/EnemySpawner';
+import GameManager from './GameManager';
 import Player from './Players/Player';
 import { Operator } from './Questions/Operator.Enum';
 import { Question } from './Questions/Question';
@@ -38,10 +40,12 @@ export default class Game {
   private options: GameOptions = defaultOptions;
 
   private player?: Player;
+  private manager: GameManager;
 
   public constructor(canvasId: string) {
     this.canvas = document.getElementById(canvasId) as HTMLCanvasElement;
     this.ctx = this.canvas.getContext('2d')!;
+    this.manager = GameManager.instance;
   }
 
   public static getInstance(canvasId: string, onLoaded?: () => void) {
@@ -57,6 +61,24 @@ export default class Game {
     this.options = options;
   }
 
+  public setOptionsFormLevelOption(option: LevelOption) {
+    const operators: Operator[] = [];
+
+    if (option.addition) operators.push(Operator.ADDITION);
+    if (option.substraction) operators.push(Operator.SUBTRACTION);
+    if (option.multiplication) operators.push(Operator.MULTIPLICATION);
+    if (option.division) operators.push(Operator.DIVISION);
+
+    this.options = {
+      ...this.options,
+      enemySpeed: option.enemy_speed,
+      isNegative: option.is_negative,
+      totalEnemy: option.total_enemy,
+      totalWave: option.total_wave,
+      operator: operators.length > 0 ? operators : ALL_OPERATOR,
+    };
+  }
+
   private resetGame(): void {
     this.questionsBank = [];
     if (this.enemy) {
@@ -65,11 +87,7 @@ export default class Game {
     }
   }
 
-  public start(): void {
-    this.resetGame();
-    this.player = new Player(3);
-    DrawingContext.createInstance(this.canvas);
-
+  private loadLevel(): void {
     this.questionsBank = QuestionGenerator.generateSegmentedRandomQuestion(
       this.options.totalEnemy,
       this.options.totalWave,
@@ -88,14 +106,29 @@ export default class Game {
       this.options.enemySpeed,
     );
     this.enemy?.setActive(true);
+  }
+
+  public start(): void {
+    this.resetGame();
+    this.player = new Player(3);
+    DrawingContext.createInstance(this.canvas);
+    this.loadLevel();
     window.requestAnimationFrame(() => this.loop());
   }
 
   public loop(): void {
-    // do something
-
     if (this.questionsBank.length <= 0 && !this.enemy?.active) {
-      return this.gameOver(true);
+      // check if next level available
+      const nextLevel = this.manager.currentLevel + 1;
+      const nextLevelConfig = GameConfig.getLevel(nextLevel);
+      console.log(nextLevel, nextLevelConfig);
+      if (!nextLevelConfig) return this.gameOver(true);
+
+      // Load new level
+      this.manager.levelOption = nextLevelConfig;
+      this.manager.currentLevel = nextLevel;
+      this.setOptionsFormLevelOption(nextLevelConfig);
+      this.loadLevel();
     }
 
     if (this.enemy) {

@@ -21,10 +21,20 @@ export default class GameConfig {
   }
 
   public static getLevel(level: number): LevelOption | null {
-    return this.getSection(`Level${level}`);
+    const levelConfig = this.getSection<LevelOption>(`Level${level}`);
+
+    return levelConfig
+      ? {
+          ...levelConfig,
+          enemy_speed: parseFloat(levelConfig.enemy_speed.toString()),
+          total_enemy: parseInt(levelConfig.total_enemy.toString()),
+          total_wave: parseInt(levelConfig.total_wave.toString()),
+        }
+      : null;
   }
 
   public static get totalLevel(): number {
+    console.log(this.config)
     return Object.entries(this.config).filter(([key]) => key.includes('Level'))
       .length;
   }
