@@ -153,7 +153,16 @@ export default class Game {
   }
 
   private gameOver(win: boolean): void {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     console.log('GAME OVER: ', win ? 'WIN' : 'LOSE');
+
+    this.ctx.font = '24px serif';
+    const textMeta = this.ctx.measureText(win ? 'WIN' : 'LOSE');
+    this.ctx.fillText(
+      'WIN',
+      (this.canvas.width - textMeta.width) / 2.0,
+      this.canvas.height / 2,
+    );
 
     if (this.options.gameOverCallback) {
       this.options.gameOverCallback();
@@ -165,5 +174,9 @@ export default class Game {
     this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.stroke();
     this.enemy?.draw();
+  }
+
+  public clearCanvas(): void {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 }

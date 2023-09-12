@@ -1,0 +1,22 @@
+@keyframes creditScroll {
+  from {top: 60%;}
+  to {top: -20%;}
+}
+
+.credit {
+  animation-name: creditScroll;
+  animation-duration: 15s;
+  animation-timing-function: linear;
+  position: absolute;
+  left: 41%;
+  top: -20%;
+}
+
+@keyframes creditScroll2 {
+  from {align-items: end;}
+  to {align-items: center;}
+}
+
+.credit2 {
+  animation-name: 4s creditScroll2 linear;
+}

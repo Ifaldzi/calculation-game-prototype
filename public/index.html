@@ -6,11 +6,22 @@
       integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
       crossorigin="anonymous"
     />
+    <link rel="stylesheet" href="style.css"/>
   </head>
-  <body>
-    <div class="row justify-content-end w-100 bg-light">
-      <div class="col-4 py-4">
-        <canvas class="border" id="canvas" width="300" height="500"></canvas>
+  <body class="bg-light">
+    <div class="row justify-content-end w-100">
+      <div id="canvas-container" class="col-4 py-4">
+        <div class="d-flex justify-content-center">
+          <canvas class="border" id="canvas" width="300" height="500"></canvas>
+        </div>
+      </div>
+      <div id="credit-container" class="col-4 py-4 d-none">
+        <div style="width: 300;" class="h-100 text-center d-grid justify-content-center align-items-center bg-black">
+          <div id="credit-text" class="text-white">
+            <h2>Just A Game</h2>
+            <p>Created by Ifal with ❤️</p>
+          </div>
+        </div>
       </div>
       <div class="col-4 my-4 border border-2">
         <div>
@@ -122,14 +133,16 @@
         <button class="mt-4" id="start-btn">START</button>
       </div>
     </div>
-    <div class="row justify-content-center w-100">
+    <div class="row w-100 justify-content-center">
       <div class="col-4">
-        <input id="answer" style="width: 300px" type="number" />
+        <div class="d-grid justify-content-center">
+          <input id="answer" style="width: 300px" type="number" />
+          <span id="life">❤️❤️❤️</span> 
+        </div>
       </div>
     </div>
     <div class="row justify-content-center w-100">
       <div class="col-4">
-        <span id="life">❤️❤️❤️</span>
       </div>
     </div>
 

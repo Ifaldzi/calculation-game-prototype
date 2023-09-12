@@ -23,7 +23,24 @@ const game: Game = Game.getInstance('canvas', () => {
       totalWave: levelOption.total_wave,
       operator: operators.length > 0 ? operators : ALL_OPERATOR,
       gameOverCallback: () => {
-        startButton.disabled = false;
+        const canvasContainer = document.getElementById('canvas-container');
+        const creditContainer = document.getElementById('credit-container');
+        const creditText = document.getElementById('credit-text');
+
+        setTimeout(() => {
+          canvasContainer?.classList.toggle('d-none');
+          creditContainer?.classList.toggle('d-none');
+          creditText?.classList.toggle('credit');
+
+          setTimeout(() => {
+            canvasContainer?.classList.toggle('d-none');
+            creditContainer?.classList.toggle('d-none');
+            creditText?.classList.toggle('credit');
+            game.clearCanvas();
+            startButton.disabled = false;
+          }, 15 * 1000);
+        }, 2 * 1000);
+
       },
     });
 
